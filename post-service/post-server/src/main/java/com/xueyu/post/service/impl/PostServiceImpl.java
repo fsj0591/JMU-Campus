@@ -27,6 +27,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.HtmlUtils;
 
 import javax.annotation.Resource;
 import java.sql.Timestamp;
@@ -72,6 +73,8 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 	public Boolean publishPost(Post post, MultipartFile[] files) {
 		Timestamp now = new Timestamp(System.currentTimeMillis());
 		post.setCreateTime(now);
+		//帖子内容富文本
+		post.setContent(HtmlUtils.htmlEscapeHex(post.getContent()));
 		// 存入帖子数据，获得主键值
 		query().getBaseMapper().insert(post);
 		// 添加数据统计表行数据
@@ -176,6 +179,8 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 			postListVO.setUserInfo(userInfos.get(record.getUserId()));
 			// 设置该帖子图片信息
 			postListVO.setImgList(postListImgs.get(record.getId()));
+			//帖子内容富文本
+			postListVO.setContent(HtmlUtils.htmlEscapeHex(record.getContent()));
 			// 设置点赞用户信息
 			if (likeUserIdsMap.get(record.getId()) != null) {
 				List<UserSimpleVO> userLikeInfos = userClient.getUserDeatilInfoList(likeUserIdsMap.get(record.getId())).getData();
@@ -203,6 +208,8 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 		PostDetailVO postDetailVO = new PostDetailVO();
 		// 拷贝相同属性项
 		BeanUtils.copyProperties(postView, postDetailVO);
+		//帖子内容富文本
+		postDetailVO.setContent(HtmlUtils.htmlEscapeHex(postView.getContent()));
 		// 查询并设置是否点赞
 		if (userId != null) {
 			LambdaQueryWrapper<LikePost> wrapper = new LambdaQueryWrapper<>();
