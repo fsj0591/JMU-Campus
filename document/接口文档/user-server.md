@@ -1,12 +1,12 @@
 ## 用户服务接口文档
-请求 BaseUrl：http://www.jmucampus.top/api/
+请求 BaseUrl：http://127.0.0.1/
 
 
 #### 用户登录
 
 ```
 请求地址：/user/login
-请求方法：GET
+请求方法：POST
 ```
 
 **入参字段**
@@ -38,7 +38,6 @@
     "data": {
         "userInfo": {
             "id": 1,
-            "openid": "",
             "username": "lucy",
             "nickname": "lucy",
             "avatarUrl": "http://xxx/default.jpg",
@@ -124,6 +123,34 @@
 }
 ```
 
+#### 获取用户相关统计数据
+
+如：用户一共有几条评论等，可以在用户主页使用
+```
+请求地址：/user/general
+请求方法：GET
+```
+
+**入参字段**
+
+以下入参字段至少一个必填，当查询他人统计时，传递 otherUserId 即可，查询自己的统计数据时有 token就行
+
+
+| 字段   | 类型    | 含义   | 必填 |
+| ------ | ------- | ------ | ---- |
+| token | Integer | 请求头添加 | 否   |
+| otherUserId | Integer | 要查询的用户id | 否   |
+
+**出参**
+
+```json
+{
+    "code": 200,
+    "message": "success",
+    "data": data,
+    "status": true
+}
+```
 
 
 #### 修改用户头像
@@ -189,7 +216,7 @@
 
 ```
 请求地址：/user/login/email
-请求方法：GET
+请求方法：POST
 ```
 
 **入参字段**
@@ -221,7 +248,6 @@
     "data": {
         "userInfo": {
             "id": 1,
-            "openid": "",
             "username": "lucy",
             "nickname": "lucy",
             "avatarUrl": "http://xxx/default.jpg",

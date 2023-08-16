@@ -42,9 +42,6 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 	LikeMapper likeMapper;
 
 	@Resource
-	CommentMapper commentMapper;
-
-	@Resource
 	PostClient postClient;
 
 	@Override
@@ -87,22 +84,9 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 		if (comment.getType().equals(CommentType.ROOT.getValue())) {
 			LambdaQueryWrapper<Comment> wrapper = new LambdaQueryWrapper<>();
 			wrapper.eq(Comment::getRootId, commentId);
-			List<Comment> list = commentMapper.selectList(wrapper);
 			deleteNum = query().getBaseMapper().delete(wrapper);
-			List<Integer> idList = new ArrayList<>();
-			for(Comment c : list){
-				idList.add(c.getId());
-			}
-			likeMapper.deleteBatchIds(idList);
-			LambdaQueryWrapper<Like> likeLambdaQueryWrapper = new LambdaQueryWrapper<>();
-			likeLambdaQueryWrapper.eq(Like::getCommentId, comment);
-			likeMapper.delete(likeLambdaQueryWrapper);
 		} else {
 			deleteNum = query().getBaseMapper().deleteById(commentId);
-			LambdaQueryWrapper<Like> queryWrapper = new LambdaQueryWrapper<>();
-			queryWrapper.eq(Like::getCommentId,commentId);
-			likeMapper.delete(queryWrapper);
-
 		}
 		// 发送mq消息
 		CommentDTO commentDTO = new CommentDTO();
