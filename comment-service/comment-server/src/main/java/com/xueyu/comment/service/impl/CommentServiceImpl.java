@@ -189,6 +189,15 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 	}
 
 	@Override
+	public void updateComment(Comment comment) {
+		Comment old = query().getBaseMapper().selectById(comment.getId());
+		if(!old.getUserId().equals(comment.getUserId())){
+			throw new CommentException("评论id与用户id不匹配");
+		}
+		update().getBaseMapper().updateById(comment);
+	}
+
+	@Override
 	public List<CommentAnswerVO> commentConvertAnswerVO(List<Comment> commentList) {
 		// 统计关联的用户id
 		Set<Integer> userIdSet = new HashSet<>();

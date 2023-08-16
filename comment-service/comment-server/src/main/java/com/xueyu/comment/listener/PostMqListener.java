@@ -62,8 +62,8 @@ public class PostMqListener {
 		for(Comment c : list){
 			commentId.add(c.getId());
 		}
-		likeMapper.deleteBatchIds(commentId);
 		int deleteNum = commentMapper.delete(wrapper);
+		likeMapper.deleteBatchIds(commentId);
 		// 删除的数量，发送mq
 		CommentDTO commentDTO = new CommentDTO();
 		commentDTO.setAuthorId(postOperateDTO.getAuthorId());
