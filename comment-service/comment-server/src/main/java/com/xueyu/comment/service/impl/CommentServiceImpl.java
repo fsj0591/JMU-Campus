@@ -102,6 +102,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 			LambdaQueryWrapper<Like> queryWrapper = new LambdaQueryWrapper<>();
 			queryWrapper.eq(Like::getCommentId,commentId);
 			likeMapper.delete(queryWrapper);
+
 		}
 		// 发送mq消息
 		CommentDTO commentDTO = new CommentDTO();

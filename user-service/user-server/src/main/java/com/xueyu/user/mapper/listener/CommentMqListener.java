@@ -1,4 +1,4 @@
-package com.xueyu.user.listener;
+package com.xueyu.user.mapper.listener;
 
 import com.xueyu.comment.sdk.dto.CommentDTO;
 import com.xueyu.user.mapper.UserGeneralMapper;
